@@ -8,5 +8,8 @@
 ### Presentation
 http://go-talks.appspot.com/github.com/chreble/todo/talk/todo.slide#1
 
+### Detailed specifications
+https://docs.google.com/a/nexway.com/document/d/1MssoKd3ENkZKOXOOFzGSGvgdxVrr45SxVOdEdHSiiaw/edit?usp=sharing
+
 ### Initial repository
 https://github.com/chreble/todo
