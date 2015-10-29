@@ -13,7 +13,7 @@ import (
 )
 
 // RegisterHandlers creates routing for all users requests
-func RegisterHandlers() (router *httprouter.Router) {
+func RegisterHandlers() (router http.Handler) {
 	rt := httprouter.New()
 	rt.GET("/", showHomepage)
 	rt.GET("/tasks", getTasks)
@@ -22,7 +22,7 @@ func RegisterHandlers() (router *httprouter.Router) {
 	rt.PUT("/tasks/:id", updateTask)
 	rt.DELETE("/tasks", deleteTasks)
 	rt.DELETE("/tasks/:id", deleteTask)
-	rt.ServeFiles("/static/*filepath", http.Dir("./public/"))
+	rt.ServeFiles("/dist/*filepath", http.Dir("./dist/"))
 	fmt.Println("Running on http://localhost:8000")
 	return rt
 }
@@ -31,7 +31,7 @@ func RegisterHandlers() (router *httprouter.Router) {
 func showHomepage(rw http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	var err error
 
-	tpl, err := template.ParseFiles("app.html")
+	tpl, err := template.ParseFiles("./dist/index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func showHomepage(rw http.ResponseWriter, req *http.Request, _ httprouter.Params
 	rw.Header().Set("Content-Type", "text/html")
 	rw.WriteHeader(http.StatusOK)
 	// tpl.Execute(rw, nil)
-	if err = tpl.Lookup("app.html").Execute(rw, nil); err != nil {
+	if err = tpl.Lookup("index.html").Execute(rw, nil); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -49,6 +49,7 @@ func getTasks(rw http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	var err error
 	tsks := task.All()
 	rw.Header().Set("Content-Type", "application/json")
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.WriteHeader(http.StatusOK)
 
 	// If there are no tasks return empty json
